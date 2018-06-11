@@ -1,7 +1,9 @@
 <launch>
-
-    <arg name="bb_topic" default="" />
-    <arg name="homog_topic" default="" />
+    <!-- topic names -->
+    <arg name="bb_topic"         default=""/>
+    <arg name="image_topic"      default=""/>
+    <arg name="camera_info"      default=""/>
+    <arg name="homography_topic" default=""/>
 
 
     <!-- forward output to [screen|log] -->
@@ -9,9 +11,10 @@
 
     <node name="object_fusion" pkg="drive_ros_object_fusion"
           type="drive_ros_object_fusion_node" output="$(arg output)">
-        <remap from="~/bb_topic" to="$(arg bb_topic)"/>
-        <remap from="~/homog_topic" to="$(arg homog_topic)"/>
+        <remap from="~/bb_topic"    to="$(arg bb_topic)"/>
+        <remap from="~/image_topic" to="$(arg image_topic)"/>
+        <remap from="camera_info"   to="$(arg camera_info)"/>
+        <remap from="homography_in" to="$(arg homography_topic)"/>
+        <rosparam command="load" file="$(find drive_ros_image_recognition)/config/homography.yaml"/>
     </node>
-
-
 </launch>
