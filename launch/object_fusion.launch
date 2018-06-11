@@ -1,0 +1,17 @@
+<launch>
+
+    <arg name="bb_topic" default="" />
+    <arg name="homog_topic" default="" />
+
+
+    <!-- forward output to [screen|log] -->
+    <arg name="output" default="screen"/>
+
+    <node name="object_fusion" pkg="drive_ros_object_fusion"
+          type="drive_ros_object_fusion_node" output="$(arg output)">
+        <remap from="~/bb_topic" to="$(arg bb_topic)"/>
+        <remap from="~/homog_topic" to="$(arg homog_topic)"/>
+    </node>
+
+
+</launch>
