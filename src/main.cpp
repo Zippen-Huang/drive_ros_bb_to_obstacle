@@ -11,17 +11,17 @@ ros::Publisher pub_image;
 
 
 void publishMarker(const std::vector<cv::Point2f>& worldPoints,
-                   visualization_msgs::MarkerArray array)
+                   visualization_msgs::MarkerArray& array)
 {
     // left
     visualization_msgs::Marker marker;
-    marker.header.frame_id = "laser_frame";
+    marker.header.frame_id = "left_camera";
     marker.header.stamp = ros::Time();
     marker.ns = "objects";
     marker.id = 0;
     marker.type = visualization_msgs::Marker::CUBE;
     marker.action = visualization_msgs::Marker::ADD;
-    marker.pose.position.x = -worldPoints.at(0).x;
+    marker.pose.position.x = worldPoints.at(0).x;
     marker.pose.position.y = worldPoints.at(0).y;
     marker.pose.position.z = 0;
     marker.pose.orientation.x = 0.0;
@@ -38,13 +38,13 @@ void publishMarker(const std::vector<cv::Point2f>& worldPoints,
     array.markers.push_back( marker );
 
     // right
-    marker.header.frame_id = "laser_frame";
+    marker.header.frame_id = "left_camera";
     marker.header.stamp = ros::Time();
     marker.ns = "objects";
     marker.id = 1;
     marker.type = visualization_msgs::Marker::CUBE;
     marker.action = visualization_msgs::Marker::ADD;
-    marker.pose.position.x = -worldPoints.at(1).x;
+    marker.pose.position.x = worldPoints.at(1).x;
     marker.pose.position.y = worldPoints.at(1).y;
     marker.pose.position.z = 0;
     marker.pose.orientation.x = 0.0;
@@ -74,11 +74,8 @@ void bbCallback(const drive_ros_msgs::BoundingBoxArrayConstPtr& msg)
         // bottom right
         imagePoints.push_back(cv::Point2f(i->x2, i->y2));
 
-        ROS_INFO_STREAM("Image points:\n" << imagePoints);
-
         if(image_operator->imageToWorld(imagePoints, worldPoints))
         {
-            ROS_INFO_STREAM("World points:\n" << worldPoints);
             publishMarker(worldPoints, array);
         }
     }
@@ -91,11 +88,6 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
 {
 
     auto img = convertImageMessage(msg);
-
-//        std::vector<cv::Point2f> imagePoints, worldPoints;
-//        imagePoints.push_back(cv::Point2f(485.0, 579.0));
-//        image_operator->imageToWorld(imagePoints, worldPoints);
-//        ROS_INFO_STREAM("World points:\n" << worldPoints);
 
     cv::Mat dest;
     if(image_operator->homographImage(*img, dest))
@@ -125,8 +117,8 @@ int main(int argc, char **argv)
   pub_marker = pnh.advertise<visualization_msgs::MarkerArray>("output_obj", 100);
   ros::Subscriber sub_bb = pnh.subscribe("bb_topic", 1, bbCallback);
 
-  pub_image = pnh.advertise<sensor_msgs::Image>("output_image", 1);
-  ros::Subscriber sub_image = nh.subscribe("/left/image_rect_color", 1, imageCallback);
+  //pub_image = pnh.advertise<sensor_msgs::Image>("output_image", 1);
+  //ros::Subscriber sub_image = nh.subscribe("/left/image_rect_color", 1, imageCallback);
 
 
   while(ros::ok()){
