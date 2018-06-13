@@ -1,5 +1,6 @@
 <launch>
     <!-- topic names -->
+    <arg name="obs_topic"        default=""/>
     <arg name="bb_topic"         default=""/>
     <arg name="camera_info"      default=""/>
     <arg name="homography_topic" default=""/>
@@ -13,6 +14,7 @@
     <node name="bb_to_obstacle" pkg="drive_ros_bb_to_obstacle"
           type="drive_ros_bb_to_obstacle_node" output="$(arg output)">
         <remap from="~/bb_topic"    to="$(arg bb_topic)"/>
+        <remap from="~/obs_topic"    to="$(arg obs_topic)"/>
         <remap from="camera_info"   to="$(arg camera_info)"/>
         <remap from="homography_in" to="$(arg homography_topic)"/>
         <param name="output_frame"  type="str" value="$(arg output_frame)" />
