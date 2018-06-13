@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(drive_ros_object_fusion)
+project(drive_ros_bb_to_obstacle)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
@@ -11,13 +11,11 @@ find_package(catkin REQUIRED COMPONENTS
   cv_bridge
   drive_ros_msgs
   geometry_msgs
-  image_geometry
-  image_transport
-  roscpp
-  sensor_msgs
   tf
+  image_transport
+  image_geometry
+  roscpp
   drive_ros_image_recognition
-  visualization_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -112,7 +110,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES drive_ros_object_fusion
-#  CATKIN_DEPENDS cv_bridge drive_ros_msgs geometry_msgs image_geometry image_transport message_generation message_runtime roscpp sensor_msgs tf
+#  CATKIN_DEPENDS
 #  DEPENDS system_lib
 )
 
