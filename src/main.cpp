@@ -10,9 +10,9 @@ drive_ros_image_recognition::ImageOperator* image_operator;
 ros::Publisher pub_obs;
 std::string output_frame;
 
-
 void bbCallback(const drive_ros_msgs::BoundingBoxArrayConstPtr& msg)
 {
+
     drive_ros_msgs::ObstacleArray obs;
 
     for(auto i=msg->boxes.begin(); i != msg->boxes.end(); i++)
@@ -33,9 +33,14 @@ void bbCallback(const drive_ros_msgs::BoundingBoxArrayConstPtr& msg)
             ob.header.frame_id = output_frame.empty() ? i->header.frame_id : output_frame;
             ob.obstacle_type = drive_ros_msgs::Obstacle::TYPE_CAMERA;
             ob.trust = i->confidence;
-            ob.width = cv::norm(worldPoints.at(0) - worldPoints.at(1));
 
-            geometry_msgs::Point centroid;
+            // set dimensions and orientation
+            ob.width = cv::norm(worldPoints.at(0) - worldPoints.at(1));
+            ob.height = 0;
+            ob.length = 0;
+            ob.yaw = 0;
+
+            geometry_msgs::Point32 centroid;
             centroid.x = ((worldPoints.at(0) + worldPoints.at(1))/2).x;
             centroid.y = ((worldPoints.at(0) + worldPoints.at(1))/2).y;
             centroid.z = 0;
