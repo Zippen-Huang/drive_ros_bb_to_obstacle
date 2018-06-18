@@ -5,6 +5,9 @@
     <arg name="camera_info"      default=""/>
     <arg name="homography_topic" default=""/>
 
+    <!-- vehicle -->
+    <arg name="vehicle"          default=""/>
+
     <!-- override boundingbox frame (if set) -->
     <arg name="output_frame"    default=""/>
 
@@ -19,5 +22,6 @@
         <remap from="homography_in" to="$(arg homography_topic)"/>
         <param name="output_frame"  type="str" value="$(arg output_frame)" />
         <rosparam command="load" file="$(find drive_ros_image_recognition)/config/homography.yaml"/>
+        <rosparam command="load" file="$(find drive_ros_bb_to_obstacle)/config/$(arg vehicle).yaml"/>
     </node>
 </launch>
